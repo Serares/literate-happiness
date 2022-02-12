@@ -6,6 +6,7 @@ import express from 'express';
 import { ApolloServer } from 'apollo-server-express';
 import { buildSchema } from 'type-graphql';
 import { HelloResolver } from './resolvers/hello';
+import { PostResolver } from './resolvers/post';
 
 const app = express();
 
@@ -19,9 +20,12 @@ const start = async () => {
     await orm.getMigrator().up();
     const apolloServer = new ApolloServer({
         schema: await buildSchema({
-            resolvers: [HelloResolver],
-            validate: false
-        })
+            resolvers: [HelloResolver, PostResolver],
+            validate: false,
+            
+        }),
+        // context is accesible by all resolvers
+        context: () => ({em: orm.em})
     })
 
     await apolloServer.start();
