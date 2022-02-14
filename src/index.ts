@@ -11,7 +11,6 @@ import session from 'express-session';
 import connectRedis from 'connect-redis';
 import { createClient } from 'redis';
 
-
 const start = async () => {
     const orm = await MikroORM.init(mikroConfig);
     await orm.getMigrator().up();
@@ -19,25 +18,26 @@ const start = async () => {
     const app = express();
 
     const RedisStore = connectRedis(session);
-    const redisClient = createClient();
+    const redisClient = createClient({legacyMode: true});
+    redisClient.connect().catch(console.error);
+
     redisClient.on("error", (err) => console.error("Redis error", err));
 
     app.use(
         session({
             name: "qid",
             store: new RedisStore({
-                client: redisClient as any,
-                disableTouch: true,
-            }),
-            cookie: {
+                client: redisClient as any
+              }),
+              cookie: {
                 maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // 10 years
                 httpOnly: true,
                 sameSite: "lax", // csrf
                 secure: __prod__, // cookie only works in https
-            },
-            saveUninitialized: false,
-            secret: "qowiueojwojfalksdjoqiwueo",
-            resave: false,
+              },
+              saveUninitialized: false,
+              secret: "qowiueojwojfalksdjoqiwueo",
+              resave: false,
         })
     );
 
