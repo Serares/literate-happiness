@@ -1,5 +1,5 @@
 import { MikroORM } from "@mikro-orm/core";
-import { __prod__ } from "./constants";
+import { __DB_NAME__, __prod__ } from "./constants";
 import { Post } from "./entities/Post";
 import path from 'path';
 import { User } from "./entities/User";
@@ -10,8 +10,8 @@ export default {
         pattern: "/^[\w-]+\d+\.[tj]s$/"
     },
     entities: [Post, User],
-    dbName: 'lireddit',
-    password: "secret",
+    dbName: __DB_NAME__,
+    password: "Pass2020!",
     type: 'postgresql',
     allowGlobalContext: true,
     debug: !__prod__
