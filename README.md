@@ -1,6 +1,14 @@
 # graphql server
 ---
-## use 
-## yarn install
+## use !
+## yarn
 ## yarn run start
-## for development
+
+-> notes
+--
+-----
+
+- use ts-node-dev to run the server
+- To create migrations run command :npx mikro-orm migration:create --initial ( needs a postgres instance to connect to )
+
+## TODOS
